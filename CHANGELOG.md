@@ -5,9 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## 3.8.0 (2025-02-20)
+
 ### Added/Changed
 
 - Require Elixir 1.19.5 as minimum; CI updated to test with Elixir 1.19.5
+- Move `preferred_cli_env` from `def project` to `def cli` (Mix 1.19 compatibility)
 - Changed `Timex.Duration.Parse` to be 2x faster
 - Fixed compilation warning from gettext
 - Added `cycled` option for `Timex.between?/4` to support time-range checks that pass through midnight
@@ -24,6 +27,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Updated tzdata to fix issues with 2024b
 - Fix deprecation: Module.eval_quoted/4 is deprecated. Use Code.eval_quoted/3 instead
 - Fix deprecation: "min..max inside match is deprecated"
+- Fix Dialyzer struct-update warnings (use map update in zoneinfo/parser, posix/parser)
+- Tests: use DateTime.compare/NaiveDateTime.compare for add/subtract/shift to avoid microsecond-precision differences on Elixir 1.19
+- Tests: format RFC3339 Europe/Copenhagen year 10 expectation updated for current tzdata (+00:53)
 
 ---
 
