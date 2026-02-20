@@ -16,7 +16,7 @@ If you are coming from an earlier version of Timex, it is recommended that you e
 by the standard library `Calendar` API is sufficient for your needs, as you may be able to avoid the dependency entirely.
 
 For those that require Timex for one reason or another, Timex now delegates to the standard library where possible, and provides
-backward compatibility to Elixir 1.8 for APIs which are used. This is to avoid duplicating effort, and to ease the maintenance of
+backward compatibility to Elixir 1.19.5 for APIs which are used. This is to avoid duplicating effort, and to ease the maintenance of
 this library in the future. Take a look at the documentation to see what APIs are available and how to use them. Many of them may have
 changed, been removed/renamed, or have had their semantics improved since early versions of the library, so if you are coming from
 an earlier version, you will need to review how you are using various APIs. The CHANGELOG is a helpful document to sort through what

@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added/Changed
 
+- Require Elixir 1.19.5 as minimum; CI updated to test with Elixir 1.19.5
 - Changed `Timex.Duration.Parse` to be 2x faster
 - Fixed compilation warning from gettext
 - Added `cycled` option for `Timex.between?/4` to support time-range checks that pass through midnight

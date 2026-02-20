@@ -69,12 +69,12 @@ defmodule Timex.Parse.Timezones.Posix do
   defp finalize(%TZ{std_abbr: std, std_offset: soffs, dst_abbr: dst, dst_offset: nil} = tz)
        when is_binary(dst) do
     # DST exists, but offset is unset, so the standard dictates that this means an hour ahead of standard
-    %TZ{tz | name: "#{std}#{to_offset(soffs)}#{dst}", dst_offset: soffs + 3600}
+    %{tz | name: "#{std}#{to_offset(soffs)}#{dst}", dst_offset: soffs + 3600}
   end
 
   defp finalize(%TZ{std_abbr: std, std_offset: soffs, dst_abbr: nil, dst_offset: nil} = tz) do
     # No DST, so set the abbreviation to STD and set the offset to the same
-    %TZ{tz | name: "#{std}#{soffs}", dst_abbr: std, dst_offset: soffs}
+    %{tz | name: "#{std}#{soffs}", dst_abbr: std, dst_offset: soffs}
   end
 
   defp finalize(
@@ -83,9 +83,9 @@ defmodule Timex.Parse.Timezones.Posix do
     # Construct the full name for this zone
     if diff(soffs, doffs) == 3600 do
       # The DST offset is one hour ahead of the STD offset, so we can omit it
-      %TZ{tz | name: "#{std}#{to_offset(soffs)}#{dst}"}
+      %{tz | name: "#{std}#{to_offset(soffs)}#{dst}"}
     else
-      %TZ{tz | name: "#{std}#{to_offset(soffs)}#{dst}#{to_offset(doffs)}"}
+      %{tz | name: "#{std}#{to_offset(soffs)}#{dst}#{to_offset(doffs)}"}
     end
   end
 
@@ -118,13 +118,13 @@ defmodule Timex.Parse.Timezones.Posix do
 
   defp parse_tz(:std_abbr, str, rule) do
     with {:ok, abbr, rest} <- parse_abbrev(str) do
-      parse_tz(:std_offset, rest, %TZ{rule | std_abbr: abbr})
+      parse_tz(:std_offset, rest, %{rule | std_abbr: abbr})
     end
   end
 
   defp parse_tz(:std_offset, str, rule) do
     with {:ok, offset, rest} <- parse_offset(str) do
-      parse_tz(:dst_abbr, rest, %TZ{rule | std_offset: offset})
+      parse_tz(:dst_abbr, rest, %{rule | std_offset: offset})
     else
       {:error, nil, ""} ->
         {:error, :invalid_offset, ""}
@@ -140,7 +140,7 @@ defmodule Timex.Parse.Timezones.Posix do
   # dst[offset][,...]
   defp parse_tz(:dst_abbr, str, rule) do
     with {:ok, abbr, rest} <- parse_abbrev(str),
-         rule = %TZ{rule | dst_abbr: abbr} do
+         rule = %{rule | dst_abbr: abbr} do
       # dst_offset is optional, and may or may not be followed by a comma and start/end rule
       # if the offset is not present.
       case rest do
@@ -159,7 +159,7 @@ defmodule Timex.Parse.Timezones.Posix do
   # offset[,...]
   defp parse_tz(:dst_offset, str, rule) do
     with {:ok, offset, rest} <- parse_offset(str),
-         rule = %TZ{rule | dst_offset: offset} do
+         rule = %{rule | dst_offset: offset} do
       case rest do
         <<>> ->
           {:ok, rule, ""}
@@ -187,7 +187,7 @@ defmodule Timex.Parse.Timezones.Posix do
       [start_dt, end_dt] ->
         with {:ok, dst_start, _} <- parse_posixtz_datetime(start_dt),
              {:ok, dst_end, rest} <- parse_posixtz_datetime(end_dt) do
-          {:ok, %TZ{rule | dst_start: dst_start, dst_end: dst_end}, rest}
+          {:ok, %{rule | dst_start: dst_start, dst_end: dst_end}, rest}
         else
           {:ok, _, rest} ->
             {:error, :expected_comma, rest}
